@@ -5,8 +5,8 @@ import './index.css';
 class Cell extends React.Component {
     render() {
         return (
-            <button className="cell" ref={this.props.cellRef} row={this.props.row} col={this.props.col} onClick={()=>{ this.props.handleClick(this.props)}} onKeyDown={(event) => { this.props.handleKeyDown(event, this.props)}}>
-                {this.props.value}
+            <button className={this.props.value === -1 ? "cell empty" : "cell"} ref={this.props.cellRef} row={this.props.row} col={this.props.col} onClick={()=>{ this.props.handleClick(this.props)}} onKeyDown={(event) => { this.props.handleKeyDown(event, this.props)}}>
+                {this.props.value === -1 ? "" : this.props.value}
             </button>
         );
     }
@@ -204,6 +204,7 @@ class Grid extends React.Component {
     render() {
         return (
         <div className="puzzle">
+          <Instructions/>
           <div className="grid">
             <Grid grid={this.state.grid}
                 handleClick={(i) => this.handleClick(i)}
@@ -214,6 +215,15 @@ class Grid extends React.Component {
     }
   }
   
+  function Instructions (props) {
+      return(
+        <div className="instructions">
+          <p>This is a simple sliding puzzle.  You can use tabs or arrow keys to navigate.</p>
+          <p>Click (or hit enter) on any square that shares a row with the empty square to "slide" one or more squares in its direction.</p>
+        </div>
+      );
+  }
+
   // ========================================
   
   ReactDOM.render(
