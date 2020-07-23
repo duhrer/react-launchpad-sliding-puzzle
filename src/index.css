@@ -13,6 +13,21 @@
     width: 72px;
   }
 
+  .empty {
+      background: #999999;
+  }
+
   .row {
       clear: left;
+  }
+
+  .grid {
+      width: 576px;
+      margin: 0 auto;
+  }
+
+  .instructions {
+      clear:left;
+      text-align: center;
+      margin: 5em;
   }
