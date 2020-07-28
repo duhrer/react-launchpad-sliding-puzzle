@@ -1,6 +1,5 @@
 import React from 'react';
 import Grid from "./Grid"
-import Symbiote from './Symbiote';
 
 export default class Puzzle extends React.Component {
   constructor(props) {
@@ -97,7 +96,6 @@ export default class Puzzle extends React.Component {
               handleClick={(i) => this.handleClick(i)}
           />
         </div>
-        <Symbiote/>
       </div>
     );
   }
