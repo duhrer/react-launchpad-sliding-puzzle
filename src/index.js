@@ -4,8 +4,6 @@ import './index.css';
 
 import Puzzle from './Puzzle';
 
-// ========================================
-
 ReactDOM.render(
     <Puzzle />,
     document.getElementById('root')

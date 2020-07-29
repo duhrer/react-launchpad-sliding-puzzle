@@ -14,7 +14,11 @@
   }
 
   .empty {
-      background: #999999;
+      background: #000000;
+  }
+
+  .midi-panel {
+      clear: left;
   }
 
   .row {
