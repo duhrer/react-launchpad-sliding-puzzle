@@ -129,7 +129,7 @@ export default class MidiPanel extends React.Component {
 
     render() {
         return (
-            <div class="midi-panel">
+            <div className="midi-panel">
                 <MultiSelect title="Inputs"  options={this.state.inputDefs}  selectedValues={this.state.selectedInputs} stateChangeCallbacks={[this.updateSelectedInputs]}/>
                 <MultiSelect title="Outputs" options={this.state.outputDefs} selectedValues={this.state.selectedOutputs} stateChangeCallbacks={[this.updateSelectedOutputs]}/>
             </div>
