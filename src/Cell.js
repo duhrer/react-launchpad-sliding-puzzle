@@ -10,7 +10,7 @@ export default class Cell extends React.Component {
                 ref={this.props.cellRef} row={this.props.row}
                 col={this.props.col} onClick={()=>{ this.props.handleClick(this.props)}}
                 onKeyDown={(event) => { this.props.handleKeyDown(event, this.props)}}
-                style={{"background-color": Colours[this.props.value]}}
+                style={{"backgroundColor": Colours[this.props.value]}}
             >
                 {this.props.value === 0 ? "" : this.props.value}
             </button>
