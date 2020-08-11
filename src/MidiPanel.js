@@ -114,15 +114,27 @@ export default class MidiPanel extends React.Component {
         }
     }
 
-    sendMidiMessage (dataAsJson) {
+    sendMidiMessage (dataAsJson, filterRegexp, invert) {
         let outputIds = Object.keys(this.state.outputDefs);
         let data = flock.midi.write(dataAsJson);
         outputIds.forEach((outputId) => {
             let outputSelected = this.state.selectedOutputs.indexOf(outputId) !== -1;
 
             if (outputSelected) {
-                let outputPort = this.outputPorts[outputId];
-                outputPort.send(data);
+                let matchesFilter = true;
+
+                if (filterRegexp) {
+                    let outputDef = this.state.outputDefs[outputId];
+                    let matchesPattern = outputDef.label.match(filterRegexp);
+                    if ( (!matchesPattern && !invert) || (invert && matchesPattern)) {
+                        matchesFilter = false;
+                    }
+                }
+
+                if (matchesFilter) {
+                    let outputPort = this.outputPorts[outputId];
+                    outputPort.send(data);
+                }
             }
         });
     }
