@@ -180,8 +180,8 @@
         }
     }
 
-    handleClick(cellProps) {
-        this.pushFromSquare(cellProps.row, cellProps.col);
+    handleClick = (row, col) => {
+        this.pushFromSquare(row, col);
     }
 
     // TODO: Write tests with these and other patterns.
@@ -214,7 +214,7 @@
             <Instructions/>
             <div className="grid">
             <Grid grid={this.state.grid}
-                handleClick={(i) => this.handleClick(i)}
+                onClick={this.handleClick}
             />
             </div>
             <MidiPanel

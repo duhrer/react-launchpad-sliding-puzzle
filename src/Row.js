@@ -21,8 +21,8 @@ export default class Row extends React.Component {
         return <Cell
             cellRef={this.props.cellRefs && this.props.cellRefs[i]}
             value={this.props.cells && this.props.cells[i]}
-            handleKeyDown={this.props.handleKeyDown}
-            handleClick={this.props.handleClick}
+            onKeyDown={this.props.onKeyDown}
+            onClick={this.props.onClick}
             key={"cell-" + (this.offset + i)} col={i} row={this.row}
         />;
     }

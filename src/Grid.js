@@ -25,11 +25,8 @@ export default class Grid extends React.Component {
         }
     }
 
-    handleKeyDown(gridComponent, event, cellProps) {
+    handleKeyDown = (event, targetRow, targetCol) => {
         if (watchedKeys.indexOf(event.key) !== -1) {
-            var targetRow = cellProps.row;
-            var targetCol = cellProps.col;
-            
             // ArrowDown
             if (event.key === "ArrowDown") {
                 targetRow = (targetRow + 1) % this.numRows;
@@ -50,7 +47,7 @@ export default class Grid extends React.Component {
                 targetCol= (targetCol + 1) % this.numCells;
             }
 
-            var toFocus = gridComponent.cellRefs[targetRow][targetCol];
+            var toFocus = this.cellRefs[targetRow][targetCol];
             toFocus.current.focus();
         }
     }
@@ -63,8 +60,10 @@ export default class Grid extends React.Component {
                 cellRefs={this.cellRefs[i]}
                 numCells={this.numCells}
                 cells={this.props.grid && this.props.grid[i]}
-                handleKeyDown= {(event, cellProps) => {this.handleKeyDown(this,event, cellProps)}}
-                handleClick={this.props.handleClick} key={"row-" + i} row={i}
+                onKeyDown={this.handleKeyDown}
+                onClick={this.props.onClick}
+                key={"row-" + i}
+                row={i}
             />)
         }
         return renderStack;
