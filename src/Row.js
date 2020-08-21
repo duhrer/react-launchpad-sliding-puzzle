@@ -19,7 +19,7 @@ export default class Row extends React.Component {
 
     renderSquare(i) {
         return <Cell
-            cellRef={this.props.cellRefs && this.props.cellRefs[i]}
+            ref={this.props.cellRefs && this.props.cellRefs[i]}
             value={this.props.cells && this.props.cells[i]}
             onKeyDown={this.props.onKeyDown}
             onClick={this.props.onClick}
