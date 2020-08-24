@@ -15,7 +15,6 @@ export default class MidiPanel extends React.Component {
 
         // Give the enclosing puzzle some way to listen to and react to MIDI inputs.
         // TODO: Remove this once we allow the Puzzle to send messages instead.
-        this.sendMidiMessage = this.sendMidiMessage.bind(this);
         this.inputListeners = props.inputListeners || [this.sendMidiMessage];
         this.outputChangeListeners = props.outputChangeListeners || [];
 
@@ -31,10 +30,6 @@ export default class MidiPanel extends React.Component {
             outputDefs: {},
             selectedOutputs: []
         }
-
-        this.handleStateChange = this.handleStateChange.bind(this);
-        this.updateSelectedInputs = this.updateSelectedInputs.bind(this);
-        this.updateSelectedOutputs = this.updateSelectedOutputs.bind(this);
 
         // Read the initial set of ports and wire up our state change listener.
         let midiAccessPromise = navigator.requestMIDIAccess({ sysex: true});
@@ -70,18 +65,18 @@ export default class MidiPanel extends React.Component {
         });
     }
 
-    updateSelectedInputs(selectedInputs) {
+    updateSelectedInputs = (selectedInputs) => {
         this.setState({selectedInputs: selectedInputs});
     }
 
-    updateSelectedOutputs(selectedOutputs) {
+    updateSelectedOutputs = (selectedOutputs) => {
         this.setState({selectedOutputs: selectedOutputs});
         this.outputChangeListeners.forEach((callback) => {
             callback();
         });
     }
 
-    handleStateChange(event) {
+    handleStateChange = (event) =>{
         let changedPort = event.port;
 
         let defsToUpdate = changedPort.type === "input" ? "inputDefs" : "outputDefs";
@@ -114,7 +109,7 @@ export default class MidiPanel extends React.Component {
         }
     }
 
-    sendMidiMessage (dataAsJson, filterRegexp, invert) {
+    sendMidiMessage = (dataAsJson, filterRegexp, invert) => {
         let outputIds = Object.keys(this.state.outputDefs);
         let data = flock.midi.write(dataAsJson);
         outputIds.forEach((outputId) => {

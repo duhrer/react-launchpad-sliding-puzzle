@@ -11,16 +11,14 @@ class MultiSelectOption extends React.Component {
 export default class MultiSelect extends React.Component {
     constructor(props) {
         super(props);
-        this.state={
+        this.state = {
             selectedValues: props.selectedValues || []
         }
-
-        this.handleChange = this.handleChange.bind(this);
     }
 
     // Apparently react can't track the selected attribute of individual options, there's an explicit warning against it.
     // It seems like you're supposed to listen to changes on select elements instead.
-    handleChange(event) {
+    handleChange = (event) => {
         let selectedValueMap = {};
         for (let i = 0; i < event.target.options.length; i++) {
             let singleOption = event.target.options[i];

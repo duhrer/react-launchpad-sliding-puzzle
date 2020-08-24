@@ -20,11 +20,6 @@
                 [ 0, 1, 2, 3, 4, 5, 6, 7]
             ]
         };
-
-        this.registerOutput     = this.registerOutput.bind(this);
-        this.handleMidiInput    = this.handleMidiInput.bind(this);
-        this.updateLaunchpad    = this.updateLaunchpad.bind(this);
-        this.updateOtherDevices = this.updateOtherDevices.bind(this);
     }
 
     // We don't care about the previous values per se, but if we do in the future, the signature is:
@@ -34,7 +29,7 @@
         this.updateOtherDevices(prevState);
     }
 
-    updateLaunchpad() {
+    updateLaunchpad = () => {
         if (this.outputCallbacks && this.outputCallbacks.length) {
             var launchpadMessages = [];
             for (let row = 0; row < this.state.grid.length; row ++) {
@@ -66,7 +61,7 @@
     }
 
     // Play the note on anything else with a timed release.
-    updateOtherDevices(prevState) {
+    updateOtherDevices = (prevState) => {
         if (this.outputCallbacks && this.outputCallbacks.length) {
             var updatedCells = [];
             for (let row = 0; row < this.state.grid.length; row ++) {
@@ -122,11 +117,11 @@
         }
     }
 
-    registerOutput (outputCallback) {
+    registerOutput = (outputCallback) => {
         this.outputCallbacks.push(outputCallback);
     }
 
-    handleMidiInput (midiMessage) {
+    handleMidiInput = (midiMessage) => {
         if (midiMessage.type === "noteOn") {
             let col = (midiMessage.note % 10) - 1;
             let row = 8 - Math.floor(midiMessage.note / 10);
