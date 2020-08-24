@@ -9,17 +9,28 @@ const watchedKeys = [
 ];
 
 export default class Grid extends React.Component {
+    static defaultProps = {
+        numRows: 8,
+        numCells: 8
+    }
+
     constructor(props) {
         super(props);
+        this.rebuildRefs();
+    }
 
-        this.numRows  = props.numRows  || 8;
-        this.numCells = props.numCells || 8;
+    componentDidUpdate (prevProps) {
+        if (this.props.numRows !== prevProps.numRows || this.props.numCells !== prevProps.numCells) {
+            this.rebuildRefs();
+        }
+    }
 
-        this.cellRefs = Array(this.numRows);
+    rebuildRefs = () => {
+        this.cellRefs = Array(this.props.numRows);
 
-        for (var rowIndex = 0; rowIndex < this.numRows; rowIndex++) {
-            this.cellRefs[rowIndex] = Array(this.numCells);
-            for (var colIndex = 0; colIndex < this.numRows; colIndex++) {
+        for (var rowIndex = 0; rowIndex < this.props.numRows; rowIndex++) {
+            this.cellRefs[rowIndex] = Array(this.props.numCells);
+            for (var colIndex = 0; colIndex < this.props.numRows; colIndex++) {
                 this.cellRefs[rowIndex][colIndex] = React.createRef();
             }
         }
@@ -29,22 +40,22 @@ export default class Grid extends React.Component {
         if (watchedKeys.indexOf(event.key) !== -1) {
             // ArrowDown
             if (event.key === "ArrowDown") {
-                targetRow = (targetRow + 1) % this.numRows;
+                targetRow = (targetRow + 1) % this.props.numRows;
             }
 
             // ArrowUp
             else if (event.key === "ArrowUp") {
-                targetRow = (targetRow + ( this.numRows - 1)) % this.numRows;
+                targetRow = (targetRow + ( this.props.numRows - 1)) % this.props.numRows;
             }
 
             // ArrowLeft
             else if (event.key === "ArrowLeft") {
-                targetCol= (targetCol + ( this.numRows - 1)) % this.numCells;
+                targetCol= (targetCol + ( this.props.numRows - 1)) % this.props.numCells;
             }
 
             // ArrowRight
             else if (event.key === "ArrowRight") {
-                targetCol= (targetCol + 1) % this.numCells;
+                targetCol= (targetCol + 1) % this.props.numCells;
             }
 
             var toFocus = this.cellRefs[targetRow][targetCol];
@@ -55,10 +66,10 @@ export default class Grid extends React.Component {
     renderRows() {
         var renderStack = [];
 
-        for (var i = 0; i < this.numRows; i++) {
+        for (var i = 0; i < this.props.numRows; i++) {
             renderStack.push(<Row 
                 cellRefs={this.cellRefs[i]}
-                numCells={this.numCells}
+                numCells={this.props.numCells}
                 cells={this.props.grid && this.props.grid[i]}
                 onKeyDown={this.handleKeyDown}
                 onClick={this.props.onClick}
@@ -69,7 +80,6 @@ export default class Grid extends React.Component {
         return renderStack;
 
     }
-    // TODO: Iterate rather than spitting out duplicate lines of HTML
     render() {
         return (
             <div>
