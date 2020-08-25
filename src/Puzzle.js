@@ -130,49 +130,56 @@
     }
 
     pushFromSquare(row, col) {
-        let cellValue = this.state.grid[row][col];
-        // No move is possible if this is the empty square (value of 0).
-        if (cellValue === 0) {
-            // TODO: Add a sound or flash when an invalid key is pressed.
-        }
-        else {
-            var thisRow = this.state.grid[row];
-            var emptyCellColumnIndex = thisRow.indexOf(0);
-            
-            // We can shift pieces horizontally if our row contains the empty square.
-            if (emptyCellColumnIndex !== -1) {
-                var rowShiftedState = this.state.grid.slice();
-
-                // Rearrange the row so that the clicked position is now the empty square.            
-                var shiftedRow = this.shiftArray(thisRow, emptyCellColumnIndex, col);
-                rowShiftedState[row] = shiftedRow;
-
-                this.setState({grid: rowShiftedState});
+        // We use the function version of `setState` so that we can safely handle asynchronous changes.
+        // https://reactjs.org/docs/react-component.html#setstate
+        this.setState((currentState, props) => {
+            let cellValue = currentState.grid[row][col];
+            // No move is possible if this is the empty square (value of 0).
+            if (cellValue === 0) {
+                // TODO: Add a sound or flash when an invalid key is pressed.
             }
             else {
-                // Check to see if our column contains the empty sqare
-                var thisColumn = this.extractCol(col);
-                var emptyCellRowIndex = thisColumn.indexOf(0);
+                var thisRow = currentState.grid[row];
+                var emptyCellColumnIndex = thisRow.indexOf(0);
                 
-                // We can shift pieces vertically if our column contains the empty square.
-                if (emptyCellRowIndex !== -1) {
-                    var columnShiftedState = JSON.parse(JSON.stringify(this.state.grid));
-                    
-                    // Rearrange the column so that the clicked position is now the empty square.
-                    var shiftedColumn = this.shiftArray(thisColumn, emptyCellRowIndex, row);
-
-                    for (var rowIndex = 0; rowIndex < this.state.grid.length; rowIndex++) {
-                        columnShiftedState[rowIndex][col] = shiftedColumn[rowIndex];
-                    }
-
-                    // Save the updated state            
-                    this.setState({ grid: columnShiftedState})
-                }            
+                // We can shift pieces horizontally if our row contains the empty square.
+                if (emptyCellColumnIndex !== -1) {
+                    var rowShiftedState = currentState.grid.slice();
+    
+                    // Rearrange the row so that the clicked position is now the empty square.            
+                    var shiftedRow = this.shiftArray(thisRow, emptyCellColumnIndex, col);
+                    rowShiftedState[row] = shiftedRow;
+    
+                    return { grid: rowShiftedState };
+                }
                 else {
-                    // TODO: Add a sound or flash when an invalid key is pressed.
+                    // Check to see if our column contains the empty sqare
+                    var thisColumn = this.extractCol(currentState, col);
+                    var emptyCellRowIndex = thisColumn.indexOf(0);
+                    
+                    // We can shift pieces vertically if our column contains the empty square.
+                    if (emptyCellRowIndex !== -1) {
+                        var columnShiftedState = JSON.parse(JSON.stringify(currentState.grid));
+                        
+                        // Rearrange the column so that the clicked position is now the empty square.
+                        var shiftedColumn = this.shiftArray(thisColumn, emptyCellRowIndex, row);
+    
+                        for (var rowIndex = 0; rowIndex < currentState.grid.length; rowIndex++) {
+                            columnShiftedState[rowIndex][col] = shiftedColumn[rowIndex];
+                        }
+    
+                        return { grid: columnShiftedState };
+                    }            
+                    else {
+                        // TODO: Add a sound or flash when an invalid key is pressed.
+                    }
                 }
             }
-        }
+
+            // If  we have not previously returned a state change, return `null` to indicate that no change is required.
+            // https://reactjs.org/blog/2017/09/26/react-v16.0.html#breaking-changes (see the "setState" changes)
+            return null;
+        });
     }
 
     handleClick = (row, col) => {
@@ -195,10 +202,10 @@
         return shiftedArray;
     }
 
-    extractCol(colIndex) {
+    extractCol(currentState, colIndex) {
         var columnCells = [];
-        for (var rowIndex = 0; rowIndex < this.state.grid.length; rowIndex++) {
-            columnCells.push(this.state.grid[rowIndex][colIndex]);
+        for (var rowIndex = 0; rowIndex < currentState.grid.length; rowIndex++) {
+            columnCells.push(currentState.grid[rowIndex][colIndex]);
         }
         return columnCells;
     }
