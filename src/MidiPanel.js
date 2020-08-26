@@ -15,7 +15,10 @@ export default class MidiPanel extends React.Component {
 
         // Give the enclosing puzzle some way to listen to and react to MIDI inputs.
         // TODO: Remove this once we allow the Puzzle to send messages instead.
+<<<<<<< HEAD
+=======
         this.sendMidiMessage = this.sendMidiMessage.bind(this);
+>>>>>>> master
         this.inputListeners = props.inputListeners || [this.sendMidiMessage];
         this.outputChangeListeners = props.outputChangeListeners || [];
 
@@ -32,10 +35,13 @@ export default class MidiPanel extends React.Component {
             selectedOutputs: []
         }
 
+<<<<<<< HEAD
+=======
         this.handleStateChange = this.handleStateChange.bind(this);
         this.updateSelectedInputs = this.updateSelectedInputs.bind(this);
         this.updateSelectedOutputs = this.updateSelectedOutputs.bind(this);
 
+>>>>>>> master
         // Read the initial set of ports and wire up our state change listener.
         let midiAccessPromise = navigator.requestMIDIAccess({ sysex: true});
         midiAccessPromise.then( (access) => {
@@ -70,18 +76,30 @@ export default class MidiPanel extends React.Component {
         });
     }
 
+<<<<<<< HEAD
+    updateSelectedInputs = (selectedInputs) => {
+        this.setState({selectedInputs: selectedInputs});
+    }
+
+    updateSelectedOutputs = (selectedOutputs) => {
+=======
     updateSelectedInputs(selectedInputs) {
         this.setState({selectedInputs: selectedInputs});
     }
 
     updateSelectedOutputs(selectedOutputs) {
+>>>>>>> master
         this.setState({selectedOutputs: selectedOutputs});
         this.outputChangeListeners.forEach((callback) => {
             callback();
         });
     }
 
+<<<<<<< HEAD
+    handleStateChange = (event) =>{
+=======
     handleStateChange(event) {
+>>>>>>> master
         let changedPort = event.port;
 
         let defsToUpdate = changedPort.type === "input" ? "inputDefs" : "outputDefs";
@@ -114,7 +132,11 @@ export default class MidiPanel extends React.Component {
         }
     }
 
+<<<<<<< HEAD
+    sendMidiMessage = (dataAsJson, filterRegexp, invert) => {
+=======
     sendMidiMessage (dataAsJson, filterRegexp, invert) {
+>>>>>>> master
         let outputIds = Object.keys(this.state.outputDefs);
         let data = flock.midi.write(dataAsJson);
         outputIds.forEach((outputId) => {
