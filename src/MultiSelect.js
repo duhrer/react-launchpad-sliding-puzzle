@@ -1,6 +1,12 @@
+// @flow
 import React from 'react';
 
-class MultiSelectOption extends React.Component {
+type MultiSelectOptionProps = {
+    label: string,
+    value: string
+};
+
+class MultiSelectOption extends React.Component<MultiSelectOptionProps, {}> {
     render() {
         return(
             <option value={this.props.value}>{this.props.label}</option>
@@ -8,44 +14,50 @@ class MultiSelectOption extends React.Component {
     }
 }
 
-export default class MultiSelect extends React.Component {
-    constructor(props) {
+type OptionDef = {
+    value: string,
+    label?: string
+}
+
+type MultiSelectProps = {
+    title: string,
+    selectedValues?: Array<Object>,
+    stateChangeCallbacks?: Array<Function>,
+    defaultValue?: any,
+    options: { [string]: OptionDef }
+}
+
+type MultiSelectState = {
+    selectedValues: Array<Object>
+};
+
+export default class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
+    constructor(props: MultiSelectProps) {
         super(props);
-<<<<<<< HEAD
         this.state = {
             selectedValues: props.selectedValues || []
         }
-=======
-        this.state={
-            selectedValues: props.selectedValues || []
-        }
-
-        this.handleChange = this.handleChange.bind(this);
->>>>>>> master
     }
 
     // Apparently react can't track the selected attribute of individual options, there's an explicit warning against it.
     // It seems like you're supposed to listen to changes on select elements instead.
-<<<<<<< HEAD
-    handleChange = (event) => {
-=======
-    handleChange(event) {
->>>>>>> master
-        let selectedValueMap = {};
-        for (let i = 0; i < event.target.options.length; i++) {
-            let singleOption = event.target.options[i];
+    handleChange = (event: SyntheticEvent<HTMLSelectElement>) => {
+        const selectedValueMap = { };
+        for (let i = 0; i < event.currentTarget.options.length; i++) {
+            const singleOption: HTMLOptionElement = event.currentTarget.options[i];
             if (singleOption.selected) {
                 selectedValueMap[singleOption.value] = true;
             }
         }
 
-        let selectedValues = Object.keys(selectedValueMap);
+        const selectedValues: Array<string> = Object.keys(selectedValueMap);
         this.setState({
             selectedValues: selectedValues
         });
 
+        // TODO: Discuss why type coverage is not picked up based on the annotations above.
         if (this.props.stateChangeCallbacks) {
-            this.props.stateChangeCallbacks.forEach((callback) => {
+            this.props.stateChangeCallbacks.forEach((callback: Function) => {
                 callback(selectedValues);
             });
         }
@@ -55,8 +67,8 @@ export default class MultiSelect extends React.Component {
         const optionsMarkup = [];
         const optionsKeys = Object.keys(this.props.options);
         for (let a = 0; a < optionsKeys.length; a++) {
-            let key = optionsKeys[a];
-            let optionDef = this.props.options[key];
+            const key = optionsKeys[a];
+            const optionDef :OptionDef = this.props.options[key];
             optionsMarkup.push(<MultiSelectOption value={optionDef.value} key={"option-" + key} label={(optionDef.label || optionDef.value)}/>);
         }
         return (
