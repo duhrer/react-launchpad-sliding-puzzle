@@ -67,8 +67,9 @@ export default class MultiSelect extends React.Component<MultiSelectProps, Multi
         const optionsKeys = Object.keys(this.props.options);
         for (let a = 0; a < optionsKeys.length; a++) {
             const key = optionsKeys[a];
-            const optionDef :OptionDef = this.props.options[key];
-            optionsMarkup.push(<MultiSelectOption value={optionDef.value} key={"option-" + key} label={(optionDef.label || optionDef.value)}/>);
+            const optionDef: OptionDef = this.props.options[key];
+            const optionLabel: string = (optionDef.label !== undefined && optionDef.label.length > 0) ? optionDef.label : optionDef.value;
+            optionsMarkup.push(<MultiSelectOption value={optionDef.value} key={"option-" + key} label={optionLabel}/>);
         }
         return (
             <div>

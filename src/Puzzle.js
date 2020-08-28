@@ -2,15 +2,15 @@
 import React from 'react';
 import Grid from "./Grid"
 import MidiPanel from './MidiPanel';
+
 import type {MidiMessage} from "./MidiPanel";
+import type {OutputCallback} from "./HandlerTypes";
 
 type PuzzleState = {
     grid: Array<Array<number>>
 };
 
 type PuzzleProps = {};
-
-type OutputCallback = (message: MidiMessage, filter: RegExp, invertMatches?: boolean) => void;
 
 type CellDef = {
     row: number,

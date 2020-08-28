@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Cell from "./Cell";
+import type {CellRef} from "./Cell";
 
 import type {ClickHandler, KeyHandler} from "./HandlerTypes";
 
@@ -10,7 +11,7 @@ type RowProps = {
     row: number,
     numCells: number,
     cells: RowCells,
-    cellRefs: Array<any>, // TODO: Figure out what to use instead of "any"
+    cellRefs: Array<CellRef>,
     onKeyDown: KeyHandler,
     onClick: ClickHandler
 }

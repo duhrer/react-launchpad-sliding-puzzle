@@ -4,6 +4,7 @@ import React from 'react';
 import MultiSelect from './MultiSelect';
 
 import type {OptionDef} from "./MultiSelect";
+import type {OutputCallback} from "./HandlerTypes"
 
 import flock from "./flock";
 import fluid from "./fluid";
@@ -26,7 +27,7 @@ type MidiPanelProps = {
     numRows: number,
     numCells: number,
     inputListeners: Array<InputListener>,
-    outputAccumulator?: (fn: Function) => void,
+    outputAccumulator?: (fn: OutputCallback) => void,
     outputChangeListeners?: Array<OutputChangeListener>
 };
 
@@ -153,9 +154,10 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
         }
     }
 
-    sendMidiMessage = (dataAsJson: MidiMessage, filterRegexp: RegExp, invert: Boolean) => {
+    sendMidiMessage = (dataAsJson: MidiMessage, filterRegexp: RegExp, invert?: boolean) => {
         const outputIds = Object.keys(this.state.outputDefs);
         const data: Iterable<number> = flock.midi.write(dataAsJson);
+        const shouldInvert: boolean = invert === true ? true : false;
         outputIds.forEach((outputId: string) => {
             const outputSelected = this.state.selectedOutputs.indexOf(outputId) !== -1;
 
@@ -164,9 +166,9 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
                 if (filterRegexp) {
                     const outputDef = this.state.outputDefs[outputId];
-                    const valueToMatch = outputDef.label || outputDef.value;
+                    const valueToMatch = (outputDef.label !== undefined && outputDef.label.length > 0) ? outputDef.label : outputDef.value;
                     const matchesPattern = valueToMatch.match(filterRegexp);
-                    if ( (!matchesPattern && !invert) || (invert && matchesPattern)) {
+                    if ( (!matchesPattern && !shouldInvert) || (shouldInvert && matchesPattern)) {
                         matchesFilter = false;
                     }
                 }

@@ -5,6 +5,10 @@ import Colours from "./Colours";
 
 import type {ClickHandler, KeyHandler} from "./HandlerTypes";
 
+// TODO: Figure out how this should work.
+// export type CellRef = {current:null | HTMLButtonElement};
+export type CellRef = {current:null | any};
+
 type CellProps = {
     row: number,
     col: number,
@@ -13,12 +17,13 @@ type CellProps = {
     onKeyDown: KeyHandler
 };
 
+
 export default class Cell extends React.Component<CellProps, {}> {
-    buttonRef: { current:null | HTMLButtonElement};
+    buttonRef: ?CellRef;
 
     constructor(props: CellProps) {
         super(props);
-        this.buttonRef = React.createRef();
+        this.buttonRef = React.createRef<HTMLButtonElement>();
     }
 
     focus() {

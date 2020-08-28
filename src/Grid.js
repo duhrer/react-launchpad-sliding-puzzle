@@ -2,6 +2,7 @@
 import React from 'react';
 import Row from "./Row";
 
+import type {CellRef} from "./Cell";
 import type {RowCells} from "./Row";
 import type {ClickHandler} from "./HandlerTypes";
 
@@ -20,7 +21,7 @@ type GridProps = {
 };
 
 export default class Grid extends React.Component <GridProps, {}> {
-    cellRefs: Array<Array<any>> // TODO: Refine this to use the right kind of reference.
+    cellRefs: Array<Array<CellRef>> // TODO: Refine this to use the right kind of reference.
     static defaultProps = {
         numRows: 8,
         numCells: 8
@@ -43,7 +44,7 @@ export default class Grid extends React.Component <GridProps, {}> {
         for (let rowIndex = 0; rowIndex < this.props.numRows; rowIndex++) {
             this.cellRefs[rowIndex] = Array(this.props.numCells);
             for (let colIndex = 0; colIndex < this.props.numRows; colIndex++) {
-                this.cellRefs[rowIndex][colIndex] = React.createRef();
+                this.cellRefs[rowIndex][colIndex] = React.createRef<HTMLButtonElement>();
             }
         }
     }
@@ -71,7 +72,9 @@ export default class Grid extends React.Component <GridProps, {}> {
             }
 
             const toFocus = this.cellRefs[targetRow][targetCol];
-            toFocus.current.focus();
+            if (toFocus.current) {
+                toFocus.current.focus();
+            }
         }
     }
 

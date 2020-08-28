@@ -5,6 +5,8 @@
 [libs]
 
 [lints]
+all=warn
+sketchy-null=error
 
 [options]
 
