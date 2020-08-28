@@ -3,12 +3,14 @@ import React  from 'react';
 
 import Colours from "./Colours";
 
+import type {ClickHandler, KeyHandler} from "./HandlerTypes";
+
 type CellProps = {
     row: number,
     col: number,
     value: number,
-    onClick: Function,
-    onKeyDown: Function
+    onClick: ClickHandler,
+    onKeyDown: KeyHandler
 };
 
 export default class Cell extends React.Component<CellProps, {}> {
@@ -29,7 +31,7 @@ export default class Cell extends React.Component<CellProps, {}> {
         this.props.onClick(this.props.row, this.props.col);
     };
 
-    handleKeyDown = (event: Event) => {
+    handleKeyDown = (event: KeyboardEvent) => {
         this.props.onKeyDown(event, this.props.row, this.props.col);
     };
 

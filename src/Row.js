@@ -2,17 +2,23 @@
 import React from 'react';
 import Cell from "./Cell";
 
+import type {ClickHandler, KeyHandler} from "./HandlerTypes";
+
+export type RowCells = Array<number>;
+
 type RowProps = {
     row: number,
     numCells: number,
-    cells: Array<number>, // TODO: death to "any"
-    cellRefs: Array<any>,
-    onKeyDown: Function,
-    onClick: Function
+    cells: RowCells,
+    cellRefs: Array<any>, // TODO: Figure out what to use instead of "any"
+    onKeyDown: KeyHandler,
+    onClick: ClickHandler
 }
 
 export default class Row extends React.Component<RowProps, {}> {
     offset: number;
+    onKeyDown: () => void; // TODO: Figure out an existing type or write our own.
+    onClick: () => void; // TODO: Figure out an existing type or write our own.å
 
     static defaultProps = {
         row: 0,

@@ -2,6 +2,9 @@
 import React from 'react';
 import Row from "./Row";
 
+import type {RowCells} from "./Row";
+import type {ClickHandler} from "./HandlerTypes";
+
 const watchedKeys = [
     "ArrowUp",
     "ArrowDown",
@@ -12,8 +15,8 @@ const watchedKeys = [
 type GridProps = {
     numCells: number,
     numRows: number,
-    onClick: Function,
-    grid?: Array<Array<number>>
+    onClick: ClickHandler,
+    grid?: Array<RowCells>
 };
 
 export default class Grid extends React.Component <GridProps, {}> {

@@ -8,10 +8,20 @@ type PuzzleState = {
     grid: Array<Array<number>>
 };
 
-export default class Puzzle extends React.Component<{}, PuzzleState> {
-    outputCallbacks: Array<Function>;
+type PuzzleProps = {};
 
-    constructor(props: any) {
+type OutputCallback = (message: MidiMessage, filter: RegExp, invertMatches?: boolean) => void;
+
+type CellDef = {
+    row: number,
+    col: number,
+    value: number
+};
+
+export default class Puzzle extends React.Component<PuzzleProps, PuzzleState> {
+    outputCallbacks: Array<OutputCallback>;
+
+    constructor(props: PuzzleProps) {
         super(props);
         this.outputCallbacks = [];
 
@@ -32,21 +42,21 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
 
     // We don't care about the previous values per se, but if we do in the future, the signature is:
     // componentDidUpdate(object prevProps, object prevState)
-    componentDidUpdate(prevProps: any, prevState: PuzzleState) {
+    componentDidUpdate(prevProps: PuzzleProps, prevState: PuzzleState) {
         this.updateLaunchpad();
         this.updateOtherDevices(prevState);
     }
 
     updateLaunchpad = () => {
         if (this.outputCallbacks && this.outputCallbacks.length) {
-            const launchpadMessages = [];
+            const launchpadMessages: Array<MidiMessage> = [];
             for (let row = 0; row < this.state.grid.length; row++) {
                 const rowCells = this.state.grid[row];
                 for (let col = 0; col < rowCells.length; col++) {
                     const velocity = this.state.grid[row][col];
                     // In "programmer" mode on the Launchpad, the top row is 81-88, bottom is 11-18
-                    const note = ((8 - row) * 10) + col + 1;
-                    const noteOnMessage = {
+                    const note: number = ((8 - row) * 10) + col + 1;
+                    const noteOnMessage: MidiMessage = {
                         type: "noteOn",
                         channel: 0,
                         velocity: velocity,
@@ -57,9 +67,9 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
             }
 
             for (let o = 0; o < this.outputCallbacks.length; o++) {
-                const outputCallback = this.outputCallbacks[o];
+                const outputCallback: OutputCallback = this.outputCallbacks[o];
                 for (let m = 0; m < launchpadMessages.length; m++) {
-                    const onMessage = launchpadMessages[m];
+                    const onMessage: MidiMessage = launchpadMessages[m];
 
                     // Update any connected and selected launchpads.
                     outputCallback(onMessage, /Launchpad/);
@@ -71,9 +81,9 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
     // Play the note on anything else with a timed release.
     updateOtherDevices = (prevState: PuzzleState) => {
         if (this.outputCallbacks && this.outputCallbacks.length) {
-            const updatedCells = [];
+            const updatedCells: Array<CellDef> = [];
             for (let row = 0; row < this.state.grid.length; row++) {
-                const rowCells = this.state.grid[row];
+                const rowCells: Array<number> = this.state.grid[row];
                 for (let col = 0; col < rowCells.length; col++) {
                     if (prevState.grid[row][col] !== rowCells[col]) {
                         updatedCells.push({
@@ -85,30 +95,30 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
                 }
             }
 
-            const inverted = updatedCells[0].value === 0;
+            const inverted: boolean = updatedCells[0].value === 0;
             const betweenNotes = 500 / (updatedCells.length - 1);
             const noteLength = betweenNotes * 0.8;
             for (let m = 0; m < updatedCells.length; m++) {
-                const updatedCell = inverted ? updatedCells[(updatedCells.length - 1) - m]:  updatedCells[m];
+                const updatedCell: CellDef = inverted ? updatedCells[(updatedCells.length - 1) - m]:  updatedCells[m];
                 if (updatedCell.value !== 0) {
                     // We derive the note from the row and column, but use different logic than the launchpad to avoid playing far too low or high.
                     const note = 30 + ((8 - updatedCell.row) * 8) + updatedCell.col;
-                    const onMessage = {
+                    const onMessage: MidiMessage = {
                         type: "noteOn",
                         channel: 0,
                         velocity: 64,
                         note: note
                     };
-                    const offMessage = {
+                    const offMessage: MidiMessage = {
                         type: "noteOff",
                         channel: 0,
                         velocity: 0,
                         note: note
                     };
-                    const timeOn = m * betweenNotes;
-                    const timeOff = timeOn + noteLength;
+                    const timeOn: number = m * betweenNotes;
+                    const timeOff: number = timeOn + noteLength;
                     for (let o: number = 0; o < this.outputCallbacks.length; o++) {
-                        const outputCallback = this.outputCallbacks[o];
+                        const outputCallback: OutputCallback = this.outputCallbacks[o];
 
                         // TODO: replace with bergson
                         setTimeout(
@@ -125,7 +135,7 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
         }
     }
 
-    registerOutput = (outputCallback: Function) => {
+    registerOutput = (outputCallback: OutputCallback) => {
         this.outputCallbacks.push(outputCallback);
     }
 
@@ -238,7 +248,7 @@ export default class Puzzle extends React.Component<{}, PuzzleState> {
     }
 }
 
-function Instructions(props) {
+function Instructions() {
     return (
         <div className="instructions">
             <p>This is a simple sliding puzzle.  You can use tabs or arrow keys to navigate.</p>

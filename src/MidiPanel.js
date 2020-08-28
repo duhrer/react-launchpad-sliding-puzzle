@@ -3,6 +3,8 @@ import React from 'react';
 
 import MultiSelect from './MultiSelect';
 
+import type {OptionDef} from "./MultiSelect";
+
 import flock from "./flock";
 import fluid from "./fluid";
 
@@ -17,24 +19,28 @@ export type MidiMessage = {
     data?: Array<number>
 };
 
+type InputListener = (message: MidiMessage) => void;
+type OutputChangeListener = () => void;
+
 type MidiPanelProps = {
     numRows: number,
     numCells: number,
-    inputListeners: Array<Function>,
-    outputAccumulator?: Function,
-    outputChangeListeners?: Array<Function>
+    inputListeners: Array<InputListener>,
+    outputAccumulator?: (fn: Function) => void,
+    outputChangeListeners?: Array<OutputChangeListener>
 };
 
 type MidiPanelState = {
-    inputDefs: Object,
+    inputDefs: { [string]: OptionDef },
     selectedInputs: Array<string>,
-    outputDefs: Object,
+    outputDefs: { [string]: OptionDef },
     selectedOutputs: Array<string>
 };
 
+
 export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanelState> {
-    inputListeners: Array<Function>;
-    outputChangeListeners: Array<Function>;
+    inputListeners: Array<InputListener>;
+    outputChangeListeners: Array<OutputChangeListener>;
     outputPorts: { [string]: MIDIOutput };
 
     static defaultProps = {
@@ -109,7 +115,7 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
     updateSelectedOutputs = (selectedOutputs:  Array<string>) => {
         this.setState({selectedOutputs: selectedOutputs});
-        this.outputChangeListeners.forEach((callback: Function) => {
+        this.outputChangeListeners.forEach((callback: () => void) => {
             callback();
         });
     }
@@ -118,7 +124,7 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
         const changedPort = event.port;
 
         const defsToUpdate = changedPort.type === "input" ? "inputDefs":  "outputDefs";
-        const updatedDefs = fluid.copy(this.state[defsToUpdate]);
+        const updatedDefs: { [string]: OptionDef } = fluid.copy(this.state[defsToUpdate]);
 
         if (changedPort.state === "connected") {
             updatedDefs[changedPort.id] = {
@@ -137,11 +143,11 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
     
     handleMidiInput (inputId: string, midiMessageEvent: MIDIMessageEvent) {
         // Confirm that this input is selected.
-        const inputDef = this.state.inputDefs[inputId];
-        const inputSelected = this.state.selectedInputs.indexOf(inputId) !== -1;
+        const inputDef: OptionDef = this.state.inputDefs[inputId];
+        const inputSelected: boolean = this.state.selectedInputs.indexOf(inputId) !== -1;
         if (inputDef && inputSelected && this.inputListeners.length) {
-            const dataAsJson = flock.midi.read(midiMessageEvent.data);
-            this.inputListeners.forEach((inputListener) => {
+            const dataAsJson :MidiMessage = flock.midi.read(midiMessageEvent.data);
+            this.inputListeners.forEach((inputListener: (message: MidiMessage) => void) => {
                 inputListener(dataAsJson);
             });
         }
@@ -149,8 +155,8 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
     sendMidiMessage = (dataAsJson: MidiMessage, filterRegexp: RegExp, invert: Boolean) => {
         const outputIds = Object.keys(this.state.outputDefs);
-        const data = flock.midi.write(dataAsJson);
-        outputIds.forEach((outputId) => {
+        const data: Iterable<number> = flock.midi.write(dataAsJson);
+        outputIds.forEach((outputId: string) => {
             const outputSelected = this.state.selectedOutputs.indexOf(outputId) !== -1;
 
             if (outputSelected) {
@@ -158,7 +164,8 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
                 if (filterRegexp) {
                     const outputDef = this.state.outputDefs[outputId];
-                    const matchesPattern = outputDef.label.match(filterRegexp);
+                    const valueToMatch = outputDef.label || outputDef.value;
+                    const matchesPattern = valueToMatch.match(filterRegexp);
                     if ( (!matchesPattern && !invert) || (invert && matchesPattern)) {
                         matchesFilter = false;
                     }

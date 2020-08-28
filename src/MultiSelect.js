@@ -14,21 +14,21 @@ class MultiSelectOption extends React.Component<MultiSelectOptionProps, {}> {
     }
 }
 
-type OptionDef = {
+export type OptionDef = {
     value: string,
     label?: string
 }
 
 type MultiSelectProps = {
     title: string,
-    selectedValues?: Array<Object>,
-    stateChangeCallbacks?: Array<Function>,
-    defaultValue?: any,
+    selectedValues?: Array<string>,
+    stateChangeCallbacks?: Array<(selectedItems: Array<string>) => void>,
+    defaultValue?: string,
     options: { [string]: OptionDef }
 }
 
 type MultiSelectState = {
-    selectedValues: Array<Object>
+    selectedValues: Array<string>
 };
 
 export default class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
@@ -55,9 +55,8 @@ export default class MultiSelect extends React.Component<MultiSelectProps, Multi
             selectedValues: selectedValues
         });
 
-        // TODO: Discuss why type coverage is not picked up based on the annotations above.
         if (this.props.stateChangeCallbacks) {
-            this.props.stateChangeCallbacks.forEach((callback: Function) => {
+            this.props.stateChangeCallbacks.forEach((callback: (selectedValues:Array<string>) => void) => {
                 callback(selectedValues);
             });
         }
