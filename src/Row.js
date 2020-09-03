@@ -1,52 +1,55 @@
+// @flow
 import React from 'react';
 import Cell from "./Cell";
+import type {CellRef} from "./Cell";
 
-export default class Row extends React.Component {
-<<<<<<< HEAD
+import type {ClickHandler, KeyHandler} from "./HandlerTypes";
+
+export type RowCells = Array<number>;
+
+type RowProps = {
+    row: number,
+    numCells: number,
+    cells: RowCells,
+    cellRefs: Array<CellRef>,
+    onKeyDown: KeyHandler,
+    onClick: ClickHandler
+}
+
+export default class Row extends React.Component<RowProps, {}> {
+    offset: number;
+    onKeyDown: () => void; // TODO: Figure out an existing type or write our own.
+    onClick: () => void; // TODO: Figure out an existing type or write our own.å
+
     static defaultProps = {
         row: 0,
-        numCells: 8
+        numCells: 8,
+        cells: [],
+        cellRefs: [],
+        onKeyDown: () => {},
+        onClick: () => {}
     }
 
-    constructor (props) {
+    constructor (props: RowProps) {
         super(props);
-        this.offset   = this.row * 8;
-=======
-    constructor (props) {
-        super(props);
-        this.row      = props.row ? parseInt(props.row, 10) : 0;
-        this.offset   = this.row * 8;
-        this.numCells = props.numCells || 8;
->>>>>>> master
+        this.offset   = this.props.row * 8;
     }
 
     renderSquares() {
-        var renderStack = [];
-<<<<<<< HEAD
-        for (var i = 0; i < this.props.numCells; i++) {
-=======
-        for (var i = 0; i < this.numCells; i++) {
->>>>>>> master
+        const renderStack = [];
+        for (let i = 0; i < this.props.numCells; i++) {
             renderStack.push(this.renderSquare(i));
         }
         return renderStack;
     }
 
-    renderSquare(i) {
+    renderSquare(i: number) {
         return <Cell
-<<<<<<< HEAD
             ref={this.props.cellRefs && this.props.cellRefs[i]}
             value={this.props.cells && this.props.cells[i]}
             onKeyDown={this.props.onKeyDown}
             onClick={this.props.onClick}
             key={"cell-" + (this.offset + i)} col={i} row={this.props.row}
-=======
-            cellRef={this.props.cellRefs && this.props.cellRefs[i]}
-            value={this.props.cells && this.props.cells[i]}
-            handleKeyDown={this.props.handleKeyDown}
-            handleClick={this.props.handleClick}
-            key={"cell-" + (this.offset + i)} col={i} row={this.row}
->>>>>>> master
         />;
     }
 
@@ -57,8 +60,4 @@ export default class Row extends React.Component {
             </div>            
         );
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> master
