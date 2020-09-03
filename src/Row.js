@@ -18,8 +18,8 @@ type RowProps = {
 
 export default class Row extends React.Component<RowProps, {}> {
     offset: number;
-    onKeyDown: () => void; // TODO: Figure out an existing type or write our own.
-    onClick: () => void; // TODO: Figure out an existing type or write our own.å
+    onKeyDown: KeyHandler;
+    onClick: ClickHandler;
 
     static defaultProps = {
         row: 0,

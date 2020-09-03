@@ -4,7 +4,7 @@ import Row from "./Row";
 
 import type {CellRef} from "./Cell";
 import type {RowCells} from "./Row";
-import type {ClickHandler} from "./HandlerTypes";
+import type {ClickHandler, KeyHandler} from "./HandlerTypes";
 
 const watchedKeys = [
     "ArrowUp",
@@ -24,7 +24,8 @@ export default class Grid extends React.Component <GridProps, {}> {
     cellRefs: Array<Array<CellRef>> // TODO: Refine this to use the right kind of reference.
     static defaultProps = {
         numRows: 8,
-        numCells: 8
+        numCells: 8,
+        onClick: () => {}
     }
 
     constructor(props: GridProps) {
@@ -49,7 +50,7 @@ export default class Grid extends React.Component <GridProps, {}> {
         }
     }
 
-    handleKeyDown = (event: KeyboardEvent, targetRow: number, targetCol: number) => {
+    handleKeyDown: KeyHandler = (event: KeyboardEvent, targetRow: number, targetCol: number) => {
         if (watchedKeys.indexOf(event.key) !== -1) {
             // ArrowDown
             if (event.key === "ArrowDown") {
