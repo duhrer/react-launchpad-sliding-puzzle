@@ -53,7 +53,6 @@ test("Navigating continuously should wrap around for each arrow key.", () => {
         let previousFocus = firstCell;
     
         for (let a = 0; a < numRows; a++) {
-            // Send a single Down Arrow Key
             previousFocus.simulate("keydown", { key: keyToSimulate});
             const currentFocus = wrapper.find("Cell:focus");
             expect(currentFocus).not.toBe(previousFocus);
