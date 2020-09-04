@@ -51,3 +51,11 @@ test("Calling the focus method should result in focus moving to the element.", (
 
     expect(document.activeElement).toBe(buttonElement.getDOMNode());
 });
+
+test("We should be able to handle a broken or missing button reference.", () => {
+    const wrapper = mount(<Cell/>);
+    wrapper.instance().buttonRef = null;
+    expect(() => {
+        wrapper.instance().focus();
+    }).not.toThrow();
+});

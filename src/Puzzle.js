@@ -6,7 +6,7 @@ import MidiPanel from './MidiPanel';
 import type {MidiMessage} from "./MidiPanel";
 import type {OutputCallback} from "./HandlerTypes";
 
-type PuzzleState = {
+export type PuzzleState = {
     grid: Array<Array<number>>
 };
 

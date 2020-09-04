@@ -17,10 +17,15 @@ test('Grid component should work without any optional properties.', () => {
     expect(props.numCells).toBe(8);
 });
 
-test("We should be able to navigate using each arrow key.", () => {
+test("We should be able to navigate using the arrow keys.", () => {
     const wrapper = mount(<Grid/>);
 
-    const arrowKeys = ["ArrowDown", "ArrowLeft", "ArrowUp", "ArrowRight"];
+    const arrowKeys = [
+        { key: "ArrowDown" },
+        { key: "ArrowLeft" },
+        { key: "ArrowUp" },
+        { key: "ArrowRight"}
+    ];
 
     for (let b = 0; b < arrowKeys.length; b++) {
         const keyToSimulate = arrowKeys[b];
@@ -32,7 +37,7 @@ test("We should be able to navigate using each arrow key.", () => {
     
         // Down Arrow
         const buttonElement = firstCell.find("button");
-        buttonElement.simulate("keyDown", { key: keyToSimulate});
+        buttonElement.simulate("keyDown", keyToSimulate);
         const secondFocus = document.activeElement;
     
         expect(secondFocus).not.toBe(initialFocus);
@@ -43,7 +48,11 @@ test("Navigating continuously should wrap around for each arrow key.", () => {
     const wrapper = mount(<Grid/>);
     const numRows = wrapper.getElement().props.numRows;
     
-    const arrowKeys = ["ArrowDown", "ArrowLeft", "ArrowUp", "ArrowRight"];
+    const arrowKeys = [
+        "ArrowDown",
+        "ArrowLeft",
+        "ArrowUp",
+        "ArrowRight"];
 
     for (let b = 0; b < arrowKeys.length; b++) {
         const keyToSimulate = arrowKeys[b];
@@ -86,14 +95,16 @@ test("It should be possible to navigate in a loop by hitting each arrow key once
     expect(finalFocus).toStrictEqual(firstCell);
 });
 
-test("It should be possible to navigate back and forth using opposing arrow keys.", () => {
+test("It should be possible to navigate back and forth using opposing navigation keys.", () => {
     const wrapper = mount(<Grid/>);
     
     const keysPairsToSimulate = [
-        ["ArrowDown", "ArrowUp"],
-        ["ArrowUp", "ArrowDown"],
-        ["ArrowRight", "ArrowLeft"],
-        ["ArrowLeft", "ArrowRight"]
+        [{ key: "ArrowDown"},   { key: "ArrowUp" }],
+        [{ key: "ArrowUp" },    { key: "ArrowDown" }],
+        [{ key: "ArrowRight" }, { key: "ArrowLeft" }],
+        [{ key: "ArrowLeft" },  { key: "ArrowRight"}],
+        [{ key: "Tab"}, { key: "Tab", shiftKey: true}],
+        [{ key: "Tab", shiftKey: true}, { key: "Tab"}]
     ];
     
     for (let b = 0; b < keysPairsToSimulate.length; b++) {
@@ -115,3 +126,5 @@ test("It should be possible to navigate back and forth using opposing arrow keys
         expect(finalFocus).toStrictEqual(firstCell);
     }
 });
+
+// TODO: Tests just for tab navigation.
