@@ -46,7 +46,7 @@ test("We should be able to navigate using the arrow keys.", () => {
 
 test("Navigating continuously should wrap around for each arrow key.", () => {
     const wrapper = mount(<Grid/>);
-    const numRows = wrapper.getElement().props.numRows;
+    const numRows = wrapper.instance().props.numRows;
     
     const arrowKeys = [
         "ArrowDown",

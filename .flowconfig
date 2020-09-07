@@ -9,5 +9,6 @@ all=warn
 sketchy-null=error
 
 [options]
+suppress_type=$FlowTODO
 
 [strict]
