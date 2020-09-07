@@ -20,6 +20,8 @@ jobs:
       CI: true
 
     artifacts:
+      paths:
+        - coverage/
 
     steps:
       - uses: actions/checkout@v1
