@@ -33,7 +33,12 @@
     }
   },
   "jest": {
-    "coverageReporters": ["html", "text-summary"]
+    "coverageReporters": ["html", "text-summary"],
+    "coveragePathIgnorePatterns": [
+      "./index.js",
+      "./src/fluid.js",
+      "./src/flock.js"
+    ]
   },
   "browserslist": {
     "production": [
