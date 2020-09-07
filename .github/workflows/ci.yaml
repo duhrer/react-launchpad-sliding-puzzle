@@ -33,9 +33,6 @@ jobs:
           node --version
           echo -n "NPM: "
           npm --version
-      - name: Security Audit
-        continue-on-error: true
-        run: npm audit
       - name: Install Dependencies
         run: npm install
       - name: Build
