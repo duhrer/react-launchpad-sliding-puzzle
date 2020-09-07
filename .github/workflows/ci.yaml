@@ -7,7 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-
   build:
     name: Build
     strategy:
@@ -17,9 +16,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       CI: true
-    # artifacts:
-    #  expose_as: "Code Coverage"
-    #  paths: ["coverage/"]
     steps:
       - uses: actions/checkout@v1
         with:
@@ -41,3 +37,8 @@ jobs:
         run: npx flow check
       - name: Test
         run: npm test -- --verbose
+    artifacts:
+      # expose_as: "Code Coverage"
+      paths:
+        - "coverage/"
+
