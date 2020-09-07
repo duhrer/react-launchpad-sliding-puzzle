@@ -37,9 +37,6 @@ jobs:
         run: npx flow check
       - name: Test
         run: npm test -- --verbose
-        artifacts:
-          expose_as: "Code Coverage"
-          paths:
-            - "coverage/"
+
 
 
