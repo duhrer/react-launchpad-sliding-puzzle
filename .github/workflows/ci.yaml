@@ -1,0 +1,39 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        node-version: [10.x, 12.x]
+    runs-on: ${{ matrix.os }}
+    env:
+      CI: true
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Versions
+        run: |
+          echo Node:
+          node --version
+          echo NPM:
+          npm --version
+      - name: NPM audit
+        continue-on-error: true
+        run: npm audit
+      - name: NPM install (CI)
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Flow
+        run: npx flow check
+      - name: Test
+        run: npm test -- --verbose
