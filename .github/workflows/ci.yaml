@@ -20,20 +20,25 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Versions
+      - name: Node/Npm Versions
         run: |
-          echo Node:
+          echo -n "Node: "
           node --version
-          echo NPM:
+          echo -n "NPM: "
           npm --version
-      - name: NPM audit
+      - name: Security Audit
         continue-on-error: true
         run: npm audit
-      - name: NPM install
+      - name: Install Dependencies
         run: npm install
       - name: Build
         run: npm run build
-      - name: Flow
+      - name: Flow Type Checking
         run: npx flow check
       - name: Test
         run: npm test -- --verbose
+      - name: Save Code Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage
