@@ -32,6 +32,11 @@ type MultiSelectState = {
 };
 
 export default class MultiSelect extends React.Component<MultiSelectProps, MultiSelectState> {
+    static defaultProps = {
+        title: "",
+        options: {}
+    }
+
     constructor(props: MultiSelectProps) {
         super(props);
         this.state = {

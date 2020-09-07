@@ -46,7 +46,8 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
     static defaultProps = {
         numRows: 8,
-        numCells: 8
+        numCells: 8,
+        inputListeners: []
     }
 
     constructor(props: MidiPanelProps) {
