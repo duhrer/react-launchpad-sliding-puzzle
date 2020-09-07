@@ -29,8 +29,8 @@ jobs:
       - name: NPM audit
         continue-on-error: true
         run: npm audit
-      - name: NPM install (CI)
-        run: npm ci
+      - name: NPM install
+        run: npm install
       - name: Build
         run: npm run build
       - name: Flow
