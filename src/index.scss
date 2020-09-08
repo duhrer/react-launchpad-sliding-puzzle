@@ -1,3 +1,9 @@
+.d-none {
+    height: 0px;
+}
+
+@import "~bootstrap/scss/bootstrap";
+
 .cell {
     background: #fff;
     border: 1px solid #999;
@@ -17,10 +23,6 @@
       background: #000000;
   }
 
-  .midi-panel {
-      clear: left;
-  }
-
   .row {
       clear: left;
   }
@@ -28,10 +30,4 @@
   .grid {
       width: 576px;
       margin: 0 auto;
-  }
-
-  .instructions {
-      clear:left;
-      text-align: center;
-      margin: 5em;
   }
