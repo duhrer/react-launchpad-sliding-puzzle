@@ -4,24 +4,26 @@
   "private": true,
   "homepage": "https://duhrer.github.io/demos/react-launchpad-slide-puzzle/",
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
-    "@testing-library/user-event": "^7.2.1",
-    "create-react-class": "^15.6.3",
-    "exports-loader": "^1.1.0",
-    "infusion": "^3.0.0-dev.20200326T173810Z.24ddb2718",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "@testing-library/jest-dom": "4.2.4",
+    "@testing-library/react": "9.5.0",
+    "@testing-library/user-event": "7.2.1",
+    "create-react-class": "15.6.3",
+    "exports-loader": "1.1.0",
+    "infusion": "3.0.0-dev.20200326T173810Z.24ddb2718",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "react-scripts": "3.4.1"
   },
   "devDependencies": {
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.4",
-    "flow-bin": "0.125.1"
+    "enzyme": "3.11.0",
+    "enzyme-adapter-react-16": "1.15.4",
+    "flow-bin": "0.125.1",
+    "rimraf": "3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "pretest": "rimraf coverage",
     "test": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject"
   },
@@ -33,7 +35,10 @@
     }
   },
   "jest": {
-    "coverageReporters": ["html", "text-summary"],
+    "coverageReporters": [
+      "html",
+      "text-summary"
+    ],
     "coveragePathIgnorePatterns": [
       "./index.js",
       "./src/fluid.js",

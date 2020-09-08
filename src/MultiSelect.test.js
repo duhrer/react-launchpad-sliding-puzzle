@@ -39,7 +39,9 @@ test("We should be able to use option defs without labels.", () => {
     />);
 
     const optionElement = wrapper.find("option");
-    const domNode: HTMLElement = optionElement.getDOMNode();
+
+    // Although this is definitely an HTMLOptionElement, Flow mistakenly thinks that there's a mismatch and that getDomNode is returning an HtmlInputElement
+    const domNode: $FlowTODO = optionElement.getDOMNode();
 
     const optionText = domNode.text;
     expect(optionText).toBe("Red");
@@ -63,7 +65,9 @@ test("We should be able to use option defs with labels.", () => {
     />);
 
     const optionElement = wrapper.find("option");
-    const domNode: HTMLElement = optionElement.getDOMNode();
+
+    // Although this is definitely an HTMLOptionElement, Flow mistakenly thinks that there's a mismatch and that getDomNode is returning an HtmlInputElement
+    const domNode: $FlowTODO = optionElement.getDOMNode();
 
     const optionText = domNode.text;
     expect(optionText).toBe("Red");
