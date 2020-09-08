@@ -9,6 +9,11 @@ import type {OutputCallback} from "./HandlerTypes"
 import flock from "./flock";
 import fluid from "./fluid";
 
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+
 export type MidiMessage = {
     type: string,
     note?: number,
@@ -35,7 +40,8 @@ type MidiPanelState = {
     inputDefs: { [string]: OptionDef },
     selectedInputs: Array<string>,
     outputDefs: { [string]: OptionDef },
-    selectedOutputs: Array<string>
+    selectedOutputs: Array<string>,
+    show: false
 };
 
 
@@ -184,10 +190,26 @@ export default class MidiPanel extends React.Component<MidiPanelProps, MidiPanel
 
     render() {
         return (
-            <div className="midi-panel">
-                <MultiSelect title="Inputs"  options={this.state.inputDefs}  selectedValues={this.state.selectedInputs} stateChangeCallbacks={[this.updateSelectedInputs]}/>
-                <MultiSelect title="Outputs" options={this.state.outputDefs} selectedValues={this.state.selectedOutputs} stateChangeCallbacks={[this.updateSelectedOutputs]}/>
-            </div>
+            <Container fluid>
+                <Row className="mt-3">
+                    <Col>
+                        <Button block className={this.state.show ? "d-none" : null} variant="secondary" onClick={() => this.setState({ show: true})}>Show MIDI Options</Button>
+                        <Button block className={this.state.show ? null : "d-none"} variant="secondary" onClick={() => this.setState({show: false})}>Hide MIDI Options</Button>
+                    </Col>
+                </Row>
+                <Row className="mt-4">
+                    <Container className={this.state.show ? null : "d-none" }>       
+                        <Row>
+                            <Col xl="12" lg="12" md="6" sm="6" xs="12">
+                                <MultiSelect title="Inputs"  options={this.state.inputDefs}  selectedValues={this.state.selectedInputs} stateChangeCallbacks={[this.updateSelectedInputs]}/>
+                            </Col>
+                            <Col xl="12" lg="12" md="6" sm="6" xs="12">
+                                <MultiSelect title="Outputs" options={this.state.outputDefs} selectedValues={this.state.selectedOutputs} stateChangeCallbacks={[this.updateSelectedOutputs]}/>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Row>
+            </Container>
         )
     }
 }

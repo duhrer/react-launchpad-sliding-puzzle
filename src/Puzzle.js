@@ -1,10 +1,16 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from "./Grid"
 import MidiPanel from './MidiPanel';
 
 import type {MidiMessage} from "./MidiPanel";
 import type {OutputCallback} from "./HandlerTypes";
+
+import Alert from "react-bootstrap/Alert";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col"
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
 
 export type PuzzleState = {
     grid: Array<Array<number>>
@@ -231,28 +237,63 @@ export default class Puzzle extends React.Component<PuzzleProps, PuzzleState> {
 
     render() {
         return (
-            <div className="puzzle">
-                <Instructions />
-                <div className="grid">
-                    <Grid grid={this.state.grid}
-                        onClick={this.handleClick}
-                    />
-                </div>
-                <MidiPanel
-                    outputAccumulator={this.registerOutput}
-                    inputListeners={[this.handleMidiInput]}
-                    outputChangeListeners={[this.updateLaunchpad]}
-                />
-            </div>
+            <Container fluid>
+                <Row>
+                    <Col xs="12" sm="12" md="12" lg="3" xl="3">
+                        <HideableInstructions />
+                    </Col>
+                    <Col xs="12" sm="12" md="12" lg="6" xl="6">
+                        <Container fluid>
+                            <Row className="mt-3">
+                                <Col>
+                                    <div className="grid">
+                                        <Grid grid={this.state.grid}
+                                            onClick={this.handleClick}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Col>
+                    <Col xs="12" sm="12" md="12" lg="3" xl="3">
+                        <MidiPanel
+                            outputAccumulator={this.registerOutput}
+                            inputListeners={[this.handleMidiInput]}
+                            outputChangeListeners={[this.updateLaunchpad]}
+                        ></MidiPanel>
+                    </Col>
+                </Row>
+            </Container>
         );
     }
 }
 
-function Instructions() {
+// Adapted from https://react-bootstrap.github.io/components/alerts/
+function HideableInstructions() {
+    const [show, setShow] = useState(true);
     return (
-        <div className="instructions">
-            <p>This is a simple sliding puzzle.  You can use tabs or arrow keys to navigate.</p>
-            <p>Click (or hit enter) on any square that shares a row with the empty square to "slide" one or more squares in its direction.</p>
-        </div>
+        <>
+            <Container fluid>
+                <Row className="mt-3">
+                    <Col>
+                        <Button block className={show ? "d-none" : null} variant="secondary" onClick={() => setShow(true)}>Show Instructions</Button>
+                        <Button block className={show ? null : "d-none"} variant="secondary" onClick={() => setShow(false)}>Hide Instructions</Button>
+                    </Col>                    
+                </Row>
+                <Row className="mt-4">
+                    <Col>
+                        <Alert show={show} variant="secondary">
+                            <Alert.Heading>Instructions</Alert.Heading>
+
+                            <p>This is a simple sliding puzzle.  You can slide one or more squares into the "empty" square (black).</p>
+
+                            <p>You can use a mouse or keyboard to operate the puzzle.  Use tabs or arrow keys to navigate, hit enter on any square that shares a row with the empty square.</p>
+
+                            <p>You can connect to MIDI devices using the "Show MIDI options" button to the right of the screen.</p>
+                        </Alert>
+                    </Col>
+                </Row>
+            </Container>
+        </>
     );
 }
